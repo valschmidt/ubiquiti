@@ -30,6 +30,10 @@ class UbiquitiWifi():
 
     def getAirOSVersion(self):
     
+        if self.username is None or self.passwd is None:
+            print('ERROR: Set username and password!')
+            return
+            
         try:
             cmd = ("sshpass -p" + self.passwd + " ssh " + self.username +
                    "@" + self.ipaddr + " cat /etc/version")
@@ -38,8 +42,9 @@ class UbiquitiWifi():
             tmp = stream.read()
             self.airOSVersion = tmp[(tmp.find('v')+1):].rstrip()
             print('Got airOS Version: %s' % self.airOSVersion)
-        except:
+        except Exception as e:
             print("Could not get airOS Version")
+            print(e)
             print("Attempting default: '8.7.0'")
             self.airOSVersion = '8.7.0'
 

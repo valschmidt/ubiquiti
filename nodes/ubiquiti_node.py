@@ -34,7 +34,7 @@ def run():
 
             U.getstatus()
         except:
-            rospy.LOGINFO('Failed to get status from Ubiquiti Radio.')
+            rospy.loginfo('Failed to get status from Ubiquiti Radio.')
     
         if U.statusraw is not None:
             # Publish messages to a new topic for each new station seen.
