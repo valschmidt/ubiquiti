@@ -28,6 +28,7 @@ def run():
     
     rate = rospy.Rate(0.5)    
     pubs = {}
+    first = True
     while not rospy.is_shutdown():
         
         try:
@@ -37,6 +38,11 @@ def run():
             rospy.LOGINFO('Failed to get status from Ubiquiti Radio.')
     
         if U.statusraw is not None:
+
+            if first:
+                laststatus = U.status
+                first=False
+                continue
 
             hostname = U.status['host']['hostname'].replace(' ','')
                 
@@ -55,8 +61,10 @@ def run():
             M.local_selfnoisedB = U.status['interfaces'][2]['wireless']['noisef']
             M.local_txpower = U.status['interfaces'][2]['wireless']['txpower']
             #M.local_channelbw = U.status['wireless']['chanbw']
-            M.local_tx_throughput = U.status['interfaces'][2]['wireless']['utilization']['tx_busy']
-            M.local_rx_throughput = U.status['interfaces'][2]['wireless']['utilization']['rx_busy']   
+            M.local_tx_throughput = (float(U.status['interfaces'][2]['stats']['tx_bytes']) 
+            - float(laststatus['interfaces'][2]['stats']['tx_bytes'])) / 2.0 / 8.0
+            M.local_rx_throughput = (float(U.status['interfaces'][2]['stats']['rx_bytes']) 
+            - float(laststatus['interfaces'][2]['stats']['rx_bytes'])) / 2.0 / 8.0
             # Distant radio information
             #M.remote_hostname = station['remote']['hostname']
             M.remote_uplink_capacity = U.status['interfaces'][2]['wireless']['txrate']
@@ -73,6 +81,7 @@ def run():
             
             M.raw_status = U.statusraw       
             pubs[hostname].publish(M)
+            laststatus = U.status
         rate.sleep()
  
  
