@@ -62,9 +62,9 @@ def run():
             M.local_txpower = U.status['interfaces'][2]['wireless']['txpower']
             #M.local_channelbw = U.status['wireless']['chanbw']
             M.local_tx_throughput = (float(U.status['interfaces'][2]['stats']['tx_bytes']) 
-            - float(laststatus['interfaces'][2]['stats']['tx_bytes'])) / 2.0 / 8.0
+            - float(laststatus['interfaces'][2]['stats']['tx_bytes'])) / 2.0 
             M.local_rx_throughput = (float(U.status['interfaces'][2]['stats']['rx_bytes']) 
-            - float(laststatus['interfaces'][2]['stats']['rx_bytes'])) / 2.0 / 8.0
+            - float(laststatus['interfaces'][2]['stats']['rx_bytes'])) / 2.0 
             # Distant radio information
             #M.remote_hostname = station['remote']['hostname']
             M.remote_uplink_capacity = U.status['interfaces'][2]['wireless']['txrate']
